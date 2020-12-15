@@ -1,7 +1,6 @@
 {
-	"python.pythonPath": "/opt/anaconda3/envs/sarsa/bin/python",
 	"python.testing.pytestArgs": [
-		"tests"
+		"src"
 	],
 	"python.testing.unittestEnabled": false,
 	"python.testing.nosetestsEnabled": false,
