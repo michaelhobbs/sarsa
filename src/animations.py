@@ -1,54 +1,80 @@
-"""
-=========================
-Simple animation examples
-=========================
-
-Two animations where the first is a random walk plot and
-the second is an image animation.
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from IPython.display import HTML
+import os
 
 
-def update_line(num, data, line):
-    line.set_data(data[..., :num])
-    return line,
+def makeThumbnail(data, title, out):
+    l, = plt.plot([], [], '.', markersize=40)
+    l2, = plt.plot([], [], 'r')
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.plot([0.1], [0.1], 'gx')
+    circle1 = plt.Circle((0.8, 0.8), 0.1, color='r', fill=False, label='Goal')
+    plt.gcf().gca().add_artist(circle1)
+    plt.title(title)
+    plt.text(0.1, 0.9, f'step: {data.shape[1]}')
+    plt.gca().set_aspect('equal', adjustable='box')
+    l.set_data(data[:, -1])
+    l2.set_data(data[:, :])
 
-###############################################################################
+    # To save the animation, use the command: line_ani.save('lines.mp4')
+    plt.savefig(f'{out}.png')
+    plt.close()
 
-fig1 = plt.figure()
 
-# Fixing random state for reproducibility
-np.random.seed(19680801)
+def animate(data, title, out, interval=100):
+    ''' animate experiment for every set of coordinates in data array
+    save animation to out file path'''
+    #text = tx.Text(0.1, 0.9, 'testing')
 
-data = np.random.rand(2, 25)
-l, = plt.plot([], [], 'r-')
-plt.xlim(0, 1)
-plt.ylim(0, 1)
-plt.xlabel('x')
-plt.title('test')
-line_ani = animation.FuncAnimation(fig1, update_line, 25, fargs=(data, l),
-                                   interval=50, blit=True)
+    fig = plt.figure(figsize=[6, 6])
 
-# To save the animation, use the command: line_ani.save('lines.mp4')
-line_ani.save('lines.mp4')
+    l, = plt.plot([], [], '.', markersize=40)
+    l2, = plt.plot([], [], 'r')
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.plot([0.1], [0.1], 'gx')
+    circle1 = plt.Circle((0.8, 0.8), 0.1, color='r', fill=False, label='Goal')
+    plt.gcf().gca().add_artist(circle1)
+    plt.title(title)
+    text = plt.text(0.1, 0.9, '')
+    plt.gca().set_aspect('equal', adjustable='box')
 
-###############################################################################
+    def update_line(num, data, line, line2):
+        line.set_data(data[:, num])
+        line2.set_data(data[:, :num])
+        #line.axes.text(0.1, 0.9, f'step: {num}')
+        text.set_text(f'step: {num}')
+        return line,
+    line_ani = animation.FuncAnimation(fig, update_line, data.shape[1], fargs=(data, l, l2),
+                                       interval=interval, blit=True)
 
-fig2 = plt.figure()
+    # To save the animation, use the command: line_ani.save('lines.mp4')
+    line_ani.save(f'{out}.mp4')
+    plt.close()
+    makeThumbnail(data, title, out)
+    # return HTML(line_ani.to_jshtml())
 
-x = np.arange(-9, 10)
-y = np.arange(-9, 10).reshape(-1, 1)
-base = np.hypot(x, y)
-ims = []
-for add in np.arange(15):
-    ims.append((plt.pcolor(x, y, base + add, norm=plt.Normalize(0, 30)),))
 
-im_ani = animation.ArtistAnimation(fig2, ims, interval=50, repeat_delay=3000,
-                                   blit=True)
-# To save this second animation with some metadata, use the following command:
-# im_ani.save('im.mp4', metadata={'artist':'Guido'})
+def generateAnimation(epsilon):
+    ''' generate animation for report '''
+    data = np.loadtxt(
+        f'output/epsilons/{epsilon}/2/ratCoords/ratCoords_50.csv', delimiter=",")
+    data = data.reshape(int(len(data)/2), 2).T
+    title = f'Epsilon: {epsilon}'
+    out = f'images/animations/last_trial_{epsilon}'
+    interval = (100, 30)[epsilon in ['0.5', '0.9']]
+    print('interval: ' + str(interval))
+    animate(data, title, out, interval)
 
-plt.show()
+
+#os.makedirs('images/animations', exist_ok=True)
+# generateAnimation('0.1')
+# _ = [generateAnimation(i) for i in ['0.1', '0.5', '0.9',
+#                                    'logDecay', 'linearDecay1-0', 'expDecay']]
