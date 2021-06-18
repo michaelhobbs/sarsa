@@ -1,0 +1,13 @@
+name: sarsa
+channels:
+  - defaults
+dependencies:
+  - python=3
+  - pylint
+  - pytest
+  - jupyter
+  - numpy
+  - matplotlib
+  - autopep8
+  - pandas
+prefix: /home/michael/anaconda3/envs/sarsa
