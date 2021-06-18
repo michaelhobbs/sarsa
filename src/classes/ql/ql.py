@@ -150,7 +150,7 @@ class QLearn:
                   str(self.trialNumber), 'ratCoords')
         self.save(directionHistory, 'directions_' +
                   str(self.trialNumber), 'directions')
-        # self.saveWeights(str(self.trialNumber))
+        self.saveWeights(str(self.trialNumber))
         return [eligibilityTrace, hasGoal, currentStep, trialReward, ratCoords]
 
     def saveWeights(self, fileName):
