@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 from classes.ql.ql import QLearn
 from classes.ql.grid import Grid
@@ -50,7 +51,7 @@ def mazeUpdate(state, action):
 
 maze.updatePosition = mazeUpdate
 
-
+# %%
 n_agents = 100
 n_trials = 500
 numSteps = np.zeros((n_agents, n_trials))

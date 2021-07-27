@@ -1,3 +1,4 @@
+# %%
 import math
 import os
 import numpy as np
@@ -25,7 +26,7 @@ np.random.seed(1337)
 # //off-policy
 # distribution of weights, max weight, median, min, histogram, weights per direction in 3D
 
-'''
+# %%
 # theoretical best:
 # √(0.7²+0.7²)−0.1 = 0.8899 (0.1 to 0.8 minus the circle radius of goal area)
 # 0.8899 / 0.03 = 29.66 (distance to closest point of goal area by mvt speed)
@@ -57,6 +58,7 @@ np.save(file, results)
 print(results)
 
 
+# %%
 # decaying epsilon: linear decay
 numSteps = np.zeros((10, 50))
 rewards = np.zeros((10, 50))
@@ -81,6 +83,7 @@ file = 'output/epsilons/linearDecay1-0/results.npy'
 np.save(file, results)
 print(results)
 
+# %%
 # math.log(10-(10-1)*(j/49),10)
 # for j in range(50):
 #    print(1-1*j/49)
@@ -116,6 +119,7 @@ file = 'output/epsilons/logDecay/results.npy'
 np.save(file, results)
 print(results)
 
+# %%
 # decaying epsilon: exp decay
 numSteps = np.zeros((10, 50))
 rewards = np.zeros((10, 50))
@@ -139,8 +143,8 @@ os.makedirs('output/epsilons/expDecay', exist_ok=True)
 file = 'output/epsilons/expDecay/results.npy'
 np.save(file, results)
 print(results)
-'''
-'''
+
+# %%
 # zero weights init
 
 
@@ -173,6 +177,7 @@ np.save(file, results)
 print(results)
 
 
+# %%
 # init weights rand between 0 and 1
 def initZeroToOneWeights(self):
     return np.array(np.random.rand(self.grid._xAxisSteps * self.grid._yAxisSteps, self.grid._numDirections))
@@ -201,8 +206,8 @@ os.makedirs('output/initZeroToOneWeights', exist_ok=True)
 file = 'output/initZeroToOneWeights/results.npy'
 np.save(file, results)
 print(results)
-'''
 
+# %%
 # off-policy (Q-learning), catch NaN exceptions and continue with next rat
 epsilons = [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1]
 results = []
@@ -239,7 +244,7 @@ np.save(file, results)
 print(results)
 
 
-'''
+# %%
 # without eligibility trace
 epsilons = [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1]
 results = []
@@ -282,4 +287,3 @@ os.makedirs('output/noEligibilityTrace/epsilons', exist_ok=True)
 file = 'output/noEligibilityTrace/epsilons/results.npy'
 np.save(file, results)
 print(results)
-'''
